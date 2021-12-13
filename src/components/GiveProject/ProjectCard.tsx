@@ -33,6 +33,7 @@ import { ReactComponent as DonatedIcon } from "../../assets/icons/donated.svg";
 import { ReactComponent as GoalIcon } from "../../assets/icons/goal.svg";
 import MarkdownIt from "markdown-it";
 import { shortenString } from "src/helpers";
+import { t, Trans } from "@lingui/macro";
 import { useAppSelector } from "src/hooks";
 
 type CountdownProps = {
@@ -120,7 +121,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
           </div>
           <div>
             <div className="cause-info-bottom-text">
-              <strong>Fundraise Complete!</strong>
+              <strong>
+                <Trans>Fundraise Complete!</Trans>
+              </strong>
             </div>
           </div>
         </>
@@ -133,7 +136,7 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
         </div>
         <div>
           <Tooltip
-            title={!finishDateObject ? "" : "Finishes at " + finishDateObject.toLocaleString() + " in your timezone"}
+            title={!finishDateObject ? "" : t`Finishes at ` + finishDateObject.toLocaleString() + t` in your timezone`}
             arrow
           >
             <div>
@@ -142,7 +145,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                   {formatted.days}:{formatted.hours}:{formatted.minutes}
                 </strong>
               </div>
-              <span className="cause-info-bottom-text">Remaining</span>
+              <span className="cause-info-bottom-text">
+                <Trans>Remaining</Trans>
+              </span>
             </div>
           </Tooltip>
         </div>
@@ -158,7 +163,7 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
               <SvgIcon component={ClockIcon} fill={svgFillColour} />
             </Grid>
             <Grid item xs={9} className="project-countdown-text">
-              Fundraise Complete!
+              <Trans>Fundraise Complete!</Trans>
             </Grid>
           </Grid>
         </>
@@ -169,7 +174,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
         <>
           <Grid container className="countdown-container">
             <Tooltip
-              title={!finishDateObject ? "" : "Finishes at " + finishDateObject.toLocaleString() + " in your timezone"}
+              title={
+                !finishDateObject ? "" : t`Finishes at ` + finishDateObject.toLocaleString() + t` in your timezone`
+              }
               arrow
             >
               <Grid item xs={12} className="countdown-object">
@@ -184,7 +191,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                         {formatted.days}:{formatted.hours}:{formatted.minutes}
                       </strong>
                     </Typography>
-                    <span className="cause-info-bottom-text"> remaining</span>
+                    <span className="cause-info-bottom-text">
+                      <Trans> remaining</Trans>
+                    </span>
                   </div>
                 </div>
               </Grid>
@@ -216,12 +225,14 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
           <SvgIcon component={CheckIcon} fill={svgFillColour} />
         </div>
         <div>
-          <Tooltip title={totalDebt + " of " + depositGoal + " sOHM raised"} arrow>
+          <Tooltip title={totalDebt + t` of ` + depositGoal + t` sOHM raised`} arrow>
             <div>
               <div className="cause-info-main-text">
                 <strong>{recipientInfoIsLoading ? <Skeleton /> : formattedGoalCompletion}%</strong>
               </div>
-              <span className="cause-info-bottom-text">of goal</span>
+              <span className="cause-info-bottom-text">
+                <Trans>of goal</Trans>
+              </span>
             </div>
           </Tooltip>
         </div>
@@ -245,10 +256,14 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                 fill={svgFillColour}
               />
               <Typography variant="h6">
-                <strong>{recipientInfoIsLoading ? <Skeleton /> : formattedTotalDebt} sOHM</strong>
+                <strong>
+                  <Trans>{recipientInfoIsLoading ? <Skeleton /> : formattedTotalDebt} sOHM</Trans>
+                </strong>
               </Typography>
             </div>
-            <div className="subtext">Donated</div>
+            <div className="subtext">
+              <Trans>Donated</Trans>
+            </div>
           </Grid>
           <Grid item xs={4} />
           <Grid item xs={4} className="project-completion">
@@ -260,10 +275,14 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                 fill={svgFillColour}
               />
               <Typography variant="h6">
-                <strong>{new BigNumber(depositGoal).toFormat()} sOHM</strong>
+                <strong>
+                  <Trans>{new BigNumber(depositGoal).toFormat()} sOHM</Trans>
+                </strong>
               </Typography>
             </div>
-            <div className="subtext">Goal</div>
+            <div className="subtext">
+              <Trans>Goal</Trans>
+            </div>
           </Grid>
         </Grid>
         <div className="project-goal-progress">
@@ -302,7 +321,7 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
     depositAmountDiff?: BigNumber,
   ) => {
     if (depositAmount.isEqualTo(new BigNumber(0))) {
-      return dispatch(error("Please enter a value!"));
+      return dispatch(error(t`Please enter a value!`));
     }
 
     // Record segment user event
@@ -333,7 +352,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
   };
 
   const getRenderedDetails = (shorten: boolean) => {
-    return { __html: MarkdownIt({ html: true }).render(shorten ? shortDescription : details) };
+    return {
+      __html: MarkdownIt({ html: true }).render(shorten ? t`${shortDescription}` : t`${details}`),
+    };
   };
 
   const getCardContent = () => {
@@ -347,13 +368,17 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                 <Grid item className="cause-title">
                   <Link href={`#/give/projects/${project.slug}`}>
                     <Typography variant="h5">
-                      <strong>{getTitle()}</strong>
+                      <strong>
+                        <Trans>{getTitle()}</Trans>
+                      </strong>
                     </Typography>
                   </Link>
                 </Grid>
                 <Grid item className="view-details">
                   <Link href={`#/give/projects/${project.slug}`} className="cause-link">
-                    <Typography variant="body1">View Details</Typography>
+                    <Typography variant="body1">
+                      <Trans>View Details</Trans>
+                    </Typography>
                     <SvgIcon
                       component={ArrowRight}
                       style={{ width: "30px", marginLeft: "0.33em" }}
@@ -383,7 +408,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                     onClick={() => handleGiveButtonClick()}
                     disabled={!address}
                   >
-                    <Typography variant="h6">Give Yield</Typography>
+                    <Typography variant="h6">
+                      <Trans>Give Yield</Trans>
+                    </Typography>
                   </Button>
                 </Grid>
               </Grid>
@@ -437,7 +464,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                   <Grid container className="project-intro" justifyContent="space-between">
                     <Grid item className="project-title">
                       <Typography variant="h5">
-                        <strong>{getTitle()}</strong>
+                        <strong>
+                          <Trans>{getTitle()}</Trans>
+                        </strong>
                       </Typography>
                     </Grid>
                     <Grid item className="project-link">
@@ -461,7 +490,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                             onClick={() => handleGiveButtonClick()}
                             disabled={!address}
                           >
-                            <Typography variant="h6">Give Yield</Typography>
+                            <Typography variant="h6">
+                              <Trans>Give Yield</Trans>
+                            </Typography>
                           </Button>
                         </div>
                       </div>
@@ -472,7 +503,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                   <Grid container direction="column">
                     <Grid item className="donors-title">
                       <Typography variant="h5">
-                        <strong>Donations</strong>
+                        <strong>
+                          <Trans>Donations</Trans>
+                        </strong>
                       </Typography>
                     </Grid>
                     <Grid item xs={12} md={4} className="project-goal">
@@ -484,7 +517,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
                           <Typography variant="h6">
                             {donorCountIsLoading ? <Skeleton /> : <strong>{donorCount}</strong>}
                           </Typography>
-                          <div className="subtext">Donors</div>
+                          <div className="subtext">
+                            <Trans>Donors</Trans>
+                          </div>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -494,7 +529,9 @@ export default function ProjectCard({ project, mode }: ProjectDetailsProps) {
               <Grid item xs={12} md={6}>
                 <Paper className="project-info">
                   <Typography variant="h5" className="project-about-header">
-                    <strong>About</strong>
+                    <strong>
+                      <Trans>About</Trans>
+                    </strong>
                   </Typography>
                   <div dangerouslySetInnerHTML={getRenderedDetails(false)} />
                 </Paper>
